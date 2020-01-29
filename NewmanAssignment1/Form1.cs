@@ -15,7 +15,8 @@ namespace NewmanAssignment1
     {
 
         private OpenFileDialog openFileDialog1;
-
+        private static List<string>  _questions;
+        private static List<string> _answers;
 
         public Form1()
         {
@@ -37,13 +38,48 @@ namespace NewmanAssignment1
 
         private void button3_Click(object sender, EventArgs e)
         {
+            var res = string.Empty;
+            
+
             openFileDialog1 = new OpenFileDialog();
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    var sr = new StreamReader(openFileDialog1.FileName);
-                    SetText(sr.ReadToEnd());
+                    /*         var sr = new StreamReader(openFileDialog1.FileName);
+                             SetText(sr.ReadToEnd());*/
+
+                    using (var sr = new StreamReader(openFileDialog1.FileName, true))
+                    {
+                        _questions = new List<string>();
+                        _answers = new List<string>();
+
+                        var s = "";
+                        while ((s = sr.ReadLine()) != null)
+                        {
+                            if (s.StartsWith("@QUESTIONS"))
+                            {
+                                while (!s.StartsWith("@END"))
+                                {
+                                    while (!s.StartsWith("@ANSWERS"))
+                                    {
+                                        if (!s.StartsWith("@QUESTIONS") &&
+                                         !s.StartsWith("@ANSWERS") &&
+                                         !s.StartsWith("@END"))
+                                        {
+                                            res += s + System.Environment.NewLine;
+                                        }
+                                        if (!s.StartsWith("@QUESTIONS"))
+
+                                            _questions.Add(s);
+                                        s = sr.ReadLine();
+
+                                    }
+                                    res += s;
+                                } 
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

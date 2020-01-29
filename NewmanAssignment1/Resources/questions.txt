@@ -8,7 +8,7 @@ seems like hundreds
 who's counting?
 @END
 
-@QUESTION
+@QUESTIONS
 
 This is a long question which rambles on with no apparent end in sight.
 It has two purposes.  The first is to catch those of you who have not

@@ -46,40 +46,41 @@ namespace NewmanAssignment1
             {
                 try
                 {
-                    /*         var sr = new StreamReader(openFileDialog1.FileName);
-                             SetText(sr.ReadToEnd());*/
-
-                    using (var sr = new StreamReader(openFileDialog1.FileName, true))
+                    using (var reader = new StreamReader(openFileDialog1.FileName))
                     {
                         _questions = new List<string>();
                         _answers = new List<string>();
 
-                        var s = "";
-                        while ((s = sr.ReadLine()) != null)
+                        var textInBetween = new List<string>();
+
+                        bool startTagFound = false;
+
+                        while (!reader.EndOfStream)
                         {
-                            if (s.StartsWith("@QUESTIONS"))
+                            var line = reader.ReadLine();
+                            if (String.IsNullOrEmpty(line))
+                                continue;
+
+                            if (!startTagFound)
                             {
-                                while (!s.StartsWith("@END"))
-                                {
-                                    while (!s.StartsWith("@ANSWERS"))
-                                    {
-                                        if (!s.StartsWith("@QUESTIONS") &&
-                                         !s.StartsWith("@ANSWERS") &&
-                                         !s.StartsWith("@END"))
-                                        {
-                                            res += s + System.Environment.NewLine;
-                                        }
-                                        if (!s.StartsWith("@QUESTIONS"))
-
-                                            _questions.Add(s);
-                                        s = sr.ReadLine();
-
-                                    }
-                                    res += s;
-                                } 
+                                startTagFound = line.StartsWith("@QUESTIONS");
+                                continue;
                             }
+
+                            bool endTagFound = line.StartsWith("@END");
+                            if (endTagFound)
+                            {
+                                // Do stuff with the text you've read in between here
+                                // ...
+                                _questions.Add(line);
+                                textInBetween.Clear();
+                                continue;
+                            }
+
+                            textInBetween.Add(line);
                         }
                     }
+
                 }
                 catch (Exception ex)
                 {

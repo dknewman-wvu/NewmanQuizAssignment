@@ -1,5 +1,7 @@
 @QUESTIONS
 How many class days are there in this entire term?
+How many class days are there in this entire term2?
+How many class days are there in this entire term3?
 @ANSWERS
 2
 forty-one

@@ -1,0 +1,27 @@
+@QUESTIONS
+How many class days are there in this entire term?
+@ANSWERS
+2
+forty-one
+twenty-nine
+seems like hundreds
+who's counting?
+@END
+
+@QUESTION
+
+This is a long question which rambles on with no apparent end in sight.
+It has two purposes.  The first is to catch those of you who have not
+provided enough buffer space for a very long question.  The second is to
+ask you to figure out how many letters there are (not counting spaces or
+punctuation marks) in this entire paragraph.
+
+@ANSWERS
+4
+509
+266
+1066
+263
+None of the above
+All of the above
+@END

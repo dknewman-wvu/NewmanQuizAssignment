@@ -16,7 +16,7 @@ namespace NewmanAssignment1
 
         private OpenFileDialog openFileDialog1;
         private static List<string>  _questions;
-        private static List<string> _answers;
+
 
         public Form1()
         {
@@ -49,36 +49,54 @@ namespace NewmanAssignment1
                     using (var reader = new StreamReader(openFileDialog1.FileName))
                     {
                         _questions = new List<string>();
-                        _answers = new List<string>();
 
                         var textInBetween = new List<string>();
 
                         bool startTagFound = false;
 
+
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
                             if (String.IsNullOrEmpty(line))
+                            {
                                 continue;
-
+                            }
                             if (!startTagFound)
                             {
                                 startTagFound = line.StartsWith("@QUESTIONS");
+                                _questions.Add(line);
+
                                 continue;
+
                             }
+
 
                             bool endTagFound = line.StartsWith("@END");
                             if (endTagFound)
                             {
                                 // Do stuff with the text you've read in between here
                                 // ...
-                                _questions.Add(line);
+                               
                                 textInBetween.Clear();
                                 continue;
                             }
 
                             textInBetween.Add(line);
+                            _questions.Add(line);
+
+                            
+
+
                         }
+                        string result = string.Join(" ", _questions.ToArray());
+                        int pFrom = result.IndexOf("@QUESTIONS") + "@QUESTIONS".Length;
+                        int pTo = result.IndexOf("@ANSWERS");
+
+                        string pResult = result.Substring(pFrom, pTo - pFrom);
+
+                        Console.WriteLine("");
+
                     }
 
                 }
@@ -89,6 +107,8 @@ namespace NewmanAssignment1
                 }
             }
         }
+
+       
 
     }
 }

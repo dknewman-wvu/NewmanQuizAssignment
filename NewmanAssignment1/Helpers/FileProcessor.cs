@@ -58,6 +58,14 @@ namespace NewmanAssignment1.Helpers
 
 
                     }
+                   
+                    //Get Index of @Question
+                    var questionIndex = Enumerable.Range(0, Form1._questions.Count)
+                                 .Where(i => Form1._questions[i] == "@QUESTIONS")
+                                 .ToList();
+                    Console.WriteLine("questionIndex");
+
+                    //Combined the string to get the answer
                     string result = string.Join(" ", Form1._questions.ToArray());
                     int pFrom = result.IndexOf("@QUESTIONS") + "@QUESTIONS".Length;
                     int pTo = result.IndexOf("@ANSWERS");
@@ -65,7 +73,6 @@ namespace NewmanAssignment1.Helpers
                     string pResult = result.Substring(pFrom, pTo - pFrom);
 
                     Console.WriteLine("");
-
                 }
 
             }

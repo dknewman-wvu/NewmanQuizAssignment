@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NewmanAssignment1.Helpers
 {
-   public partial class FileProcessor
+    public partial class FileProcessor
     {
-    
+        public static List<string> questionBank;
+
         public static void ReadFile()
         {
             try
@@ -18,11 +20,8 @@ namespace NewmanAssignment1.Helpers
                 using (var reader = new StreamReader(Form1.openFileDialog1.FileName))
                 {
                     Form1._questions = new List<string>();
-
                     var textInBetween = new List<string>();
-
                     bool startTagFound = false;
-
 
                     while (!reader.EndOfStream)
                     {
@@ -54,26 +53,15 @@ namespace NewmanAssignment1.Helpers
                         textInBetween.Add(line);
                         Form1._questions.Add(line);
 
-
-
-
                     }
-                   
-                    //Get Index of @Question
-                    var questionIndex = Enumerable.Range(0, Form1._questions.Count)
-                                 .Where(i => Form1._questions[i] == "@QUESTIONS")
-                                 .ToList();
-                    Console.WriteLine("questionIndex");
 
-                    //Combined the string to get the answer
-                    string result = string.Join(" ", Form1._questions.ToArray());
-                    int pFrom = result.IndexOf("@QUESTIONS") + "@QUESTIONS".Length;
-                    int pTo = result.IndexOf("@ANSWERS");
 
-                    string pResult = result.Substring(pFrom, pTo - pFrom);
+                    PopulateQuestions();
 
-                    Console.WriteLine("");
+
+
                 }
+
 
             }
             catch (Exception ex)
@@ -81,6 +69,53 @@ namespace NewmanAssignment1.Helpers
                 MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
                 $"Details:\n\n{ex.StackTrace}");
             }
+        }
+
+        public static void PopulateQuestions()
+        {
+            // Populate the Question Bank
+            var questionIndex = new List<string>();
+            var answerIndex = new List<string>();
+            questionBank = new List<string>();
+            int j = 0;
+            string result = string.Join(" ", Form1._questions.ToArray());
+
+            MatchCollection questionMatchIndex = Regex.Matches(result, "@QUESTIONS");
+
+            foreach (Match m in questionMatchIndex)
+            {
+                Console.WriteLine(m.Index);
+                questionIndex.Add(m.Index.ToString());
+
+            }
+            Console.WriteLine("");
+
+            MatchCollection answerMatchIndex = Regex.Matches(result, "@ANSWERS");
+
+            foreach (Match m in answerMatchIndex)
+            {
+                Console.WriteLine(m.Index);
+                answerIndex.Add(m.Index.ToString());
+
+            }
+            Console.WriteLine("");
+
+            // NEED TO FIX THIS LOGIC
+            for (var i = 0; i < questionIndex.Count; i++)
+            {
+                int start = questionIndex.ToString()[i];
+                int end = answerIndex.ToString()[i];
+                //Combined the string to get the answer
+                int pFrom = result.IndexOf("@QUESTIONS", start) + "@QUESTIONS".Length;
+                int pTo = result.IndexOf("@ANSWERS", end);
+                string pResult = result.Substring(pFrom, pTo - pFrom);
+                questionBank.Add(result.Substring(pFrom, pTo - pFrom));
+                Console.WriteLine("");
+                j++;
+
+            }
+            Console.WriteLine("");
+            j = 0;
         }
 
 

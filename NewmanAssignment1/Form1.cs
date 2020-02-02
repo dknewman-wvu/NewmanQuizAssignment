@@ -16,7 +16,7 @@ namespace NewmanAssignment1
     {
 
         public static OpenFileDialog openFileDialog1;
-        public static List<string>  _questions;
+        public static List<string>  _quiz;
 
 
         public Form1()

@@ -13,6 +13,8 @@ namespace NewmanAssignment1.Helpers
     public partial class FileProcessor
     {
         public static List<string> questionBank;
+        public static List<string> answerBank;
+
 
         public static void ReadFile()
         {
@@ -20,7 +22,7 @@ namespace NewmanAssignment1.Helpers
             {
                 using (var reader = new StreamReader(Form1.openFileDialog1.FileName))
                 {
-                    Form1._questions = new List<string>();
+                    Form1._quiz = new List<string>();
                     var textInBetween = new List<string>();
                     bool startTagFound = false;
 
@@ -34,7 +36,7 @@ namespace NewmanAssignment1.Helpers
                         if (!startTagFound)
                         {
                             startTagFound = line.StartsWith("@QUESTIONS");
-                            Form1._questions.Add(line);
+                            Form1._quiz.Add(line);
 
                             continue;
 
@@ -44,19 +46,19 @@ namespace NewmanAssignment1.Helpers
                         bool endTagFound = line.StartsWith("@END");
                         if (endTagFound)
                         {
-
-
                             textInBetween.Clear();
+                            Form1._quiz.Add(line);
                             continue;
                         }
 
                         textInBetween.Add(line);
-                        Form1._questions.Add(line);
+                        Form1._quiz.Add(line);
 
                     }
 
 
                     PopulateQuestions();
+                    PopulateAnswers();
 
 
 
@@ -77,7 +79,7 @@ namespace NewmanAssignment1.Helpers
             var questionIndex = new List<string>();
             var answerIndex = new List<string>();
             questionBank = new List<string>();
-            string result = string.Join(" ", Form1._questions.ToArray());
+            string result = string.Join(" ", Form1._quiz.ToArray());
 
             MatchCollection questionMatchIndex = Regex.Matches(result, "@QUESTIONS");
 
@@ -117,6 +119,42 @@ namespace NewmanAssignment1.Helpers
             }
             Debug.WriteLine("");
         }
+
+        public static void PopulateAnswers()
+        {
+            // Populate the Answer Bank
+           // var endIndex = new List<string>();
+            //var answerIndex = new List<string>();
+            answerBank = Form1._quiz;
+            // string result = string.Join(" ", Form1._quiz.ToArray());
+
+            var answerIndex = Enumerable.Range(0, answerBank.Count)
+             .Where(i => answerBank[i] == "@ANSWERS")
+             .ToList();
+
+            var endIndex = Enumerable.Range(0, answerBank.Count)
+            .Where(i => answerBank[i] == "@END")
+            .ToList();
+
+
+            for (var i = 0; i < answerIndex.Count; i++)
+
+            {
+
+                var result1 = answerBank.Skip(answerIndex[i] + 1).Take(endIndex[i] - (answerIndex[i] + 1));
+
+                Debug.WriteLine("");
+
+            }
+
+
+            var firstIndex = answerBank.FindIndex(r => r.Contains("@ANSWERS"));
+            var secondIndex = answerBank.FindIndex(r => r.Contains("@END"));
+            var result = answerBank.Skip(firstIndex + 1).Take(secondIndex - (firstIndex + 1));
+            Debug.WriteLine("");
+
+        }
+
 
 
 

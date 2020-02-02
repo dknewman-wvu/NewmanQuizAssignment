@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -43,8 +44,7 @@ namespace NewmanAssignment1.Helpers
                         bool endTagFound = line.StartsWith("@END");
                         if (endTagFound)
                         {
-                            // Do stuff with the text you've read in between here
-                            // ...
+
 
                             textInBetween.Clear();
                             continue;
@@ -77,18 +77,17 @@ namespace NewmanAssignment1.Helpers
             var questionIndex = new List<string>();
             var answerIndex = new List<string>();
             questionBank = new List<string>();
-            int j = 0;
             string result = string.Join(" ", Form1._questions.ToArray());
 
             MatchCollection questionMatchIndex = Regex.Matches(result, "@QUESTIONS");
 
             foreach (Match m in questionMatchIndex)
             {
-                Console.WriteLine(m.Index);
                 questionIndex.Add(m.Index.ToString());
+                Debug.WriteLine(m.Index);
+
 
             }
-            Console.WriteLine("");
 
             MatchCollection answerMatchIndex = Regex.Matches(result, "@ANSWERS");
 
@@ -98,24 +97,25 @@ namespace NewmanAssignment1.Helpers
                 answerIndex.Add(m.Index.ToString());
 
             }
-            Console.WriteLine("");
 
-            // NEED TO FIX THIS LOGIC
             for (var i = 0; i < questionIndex.Count; i++)
             {
-                int start = questionIndex.ToString()[i];
-                int end = answerIndex.ToString()[i];
+                var start = questionIndex[i];
+                int iStart = Int32.Parse(start.ToString());
+                Debug.WriteLine("iStart = " + iStart);
+
+                var end = answerIndex[i];
+                int iEnd = Int32.Parse(end.ToString());
+
                 //Combined the string to get the answer
-                int pFrom = result.IndexOf("@QUESTIONS", start) + "@QUESTIONS".Length;
-                int pTo = result.IndexOf("@ANSWERS", end);
+                int pFrom = result.IndexOf("@QUESTIONS", iStart) + "@QUESTIONS".Length;
+                int pTo = result.IndexOf("@ANSWERS", iEnd);
                 string pResult = result.Substring(pFrom, pTo - pFrom);
                 questionBank.Add(result.Substring(pFrom, pTo - pFrom));
-                Console.WriteLine("");
-                j++;
+                Debug.WriteLine("");
 
             }
-            Console.WriteLine("");
-            j = 0;
+            Debug.WriteLine("");
         }
 
 

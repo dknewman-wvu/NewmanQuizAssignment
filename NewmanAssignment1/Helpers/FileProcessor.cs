@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NewmanAssignment1.Data;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -84,8 +86,28 @@ namespace NewmanAssignment1.Helpers
             var answerIndex = new List<string>();
             questionBank = new List<string>();
             string result = string.Join(" ", Form1._quiz.ToArray());
-
             MatchCollection questionMatchIndex = Regex.Matches(result, "@QUESTIONS");
+
+            QuizData quiz = new QuizData();
+            string JSONresult = JsonConvert.SerializeObject(quiz);
+            string path = @"C:\quiz.json";
+            if (File.Exists(path))
+            {
+                using (var tw = new StreamWriter(path, true))
+                {
+                    tw.WriteLine(JSONresult.ToString());
+                    tw.Close();
+                }
+            }
+            else if (!File.Exists(path))
+            {
+
+                using (var tw = new StreamWriter(path, true))
+                {
+                    tw.WriteLine(JSONresult.ToString());
+                    tw.Close();
+                }
+            }
 
             foreach (Match m in questionMatchIndex)
             {
@@ -127,12 +149,9 @@ namespace NewmanAssignment1.Helpers
         public static void PopulateAnswers()
         {
             // Populate the Answer Bank
-            // var endIndex = new List<string>();
-            //var answerIndex = new List<string>();
+   
             answerKey = new List<string>();
-
             answerBank = Form1._quiz;
-            // string result = string.Join(" ", Form1._quiz.ToArray());
 
             var answerIndex = Enumerable.Range(0, answerBank.Count)
              .Where(i => answerBank[i] == "@ANSWERS")
@@ -150,9 +169,6 @@ namespace NewmanAssignment1.Helpers
                 answerBlock = new List<string>();
 
                 //answerBlock.Add("@ANSWERSTART" + i);
-
-
-
 
                 foreach (string item in addAnswer)
                 {

@@ -14,6 +14,10 @@ namespace NewmanAssignment1.Helpers
     {
         public static List<string> questionBank;
         public static List<string> answerBank;
+        public static List<string> answerBlock;
+        public static List<string> answerKey;
+
+
 
 
         public static void ReadFile()
@@ -123,8 +127,10 @@ namespace NewmanAssignment1.Helpers
         public static void PopulateAnswers()
         {
             // Populate the Answer Bank
-           // var endIndex = new List<string>();
+            // var endIndex = new List<string>();
             //var answerIndex = new List<string>();
+            answerKey = new List<string>();
+
             answerBank = Form1._quiz;
             // string result = string.Join(" ", Form1._quiz.ToArray());
 
@@ -140,19 +146,34 @@ namespace NewmanAssignment1.Helpers
             for (var i = 0; i < answerIndex.Count; i++)
 
             {
+                var addAnswer = answerBank.Skip(answerIndex[i] + 1).Take(endIndex[i] - (answerIndex[i] + 1));
+                answerBlock = new List<string>();
 
-                var result1 = answerBank.Skip(answerIndex[i] + 1).Take(endIndex[i] - (answerIndex[i] + 1));
+                //answerBlock.Add("@ANSWERSTART" + i);
+
+
+
+
+                foreach (string item in addAnswer)
+                {
+
+                    answerBlock.Add(item);
+
+
+                }
+                // answerBlock.Add("@ANSWEREND" + i);
+                answerKey.Add(answerBlock[0]);
 
                 Debug.WriteLine("");
 
             }
 
 
-            var firstIndex = answerBank.FindIndex(r => r.Contains("@ANSWERS"));
+        /*    var firstIndex = answerBank.FindIndex(r => r.Contains("@ANSWERS"));
             var secondIndex = answerBank.FindIndex(r => r.Contains("@END"));
             var result = answerBank.Skip(firstIndex + 1).Take(secondIndex - (firstIndex + 1));
             Debug.WriteLine("");
-
+*/
         }
 
 

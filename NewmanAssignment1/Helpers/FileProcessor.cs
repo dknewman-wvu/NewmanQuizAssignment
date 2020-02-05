@@ -1,5 +1,6 @@
-﻿using NewmanAssignment1.Data;
+﻿using NewmanAssignment1.QuizData;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -64,9 +65,6 @@ namespace NewmanAssignment1.Helpers
 
 
                     PopulateQuestions();
-                    PopulateAnswers();
-
-
 
                 }
 
@@ -81,120 +79,133 @@ namespace NewmanAssignment1.Helpers
 
         public static void PopulateQuestions()
         {
-            // Populate the Question Bank
-            var questionIndex = new List<string>();
-            var answerIndex = new List<string>();
-            questionBank = new List<string>();
-            string result = string.Join(" ", Form1._quiz.ToArray());
-            MatchCollection questionMatchIndex = Regex.Matches(result, "@QUESTIONS");
-
-            QuizData quiz = new QuizData();
-            string JSONresult = JsonConvert.SerializeObject(quiz);
-            string path = @"C:\quiz.json";
-            if (File.Exists(path))
+            try
             {
-                using (var tw = new StreamWriter(path, true))
+                // Populate the Question Bank
+                DataQuiz quiz = new DataQuiz();
+                var questionIndex = new List<string>();
+                var answerIndex = new List<string>();
+                string result = string.Join(" ", Form1._quiz.ToArray());
+                questionBank = new List<string>();
+                answerKey = new List<string>();
+                answerBank = Form1._quiz;
+                MatchCollection questionMatchIndex = Regex.Matches(result, "@QUESTIONS");
+
+
+                var answerIndex2 = Enumerable.Range(0, answerBank.Count)
+                 .Where(i => answerBank[i] == "@ANSWERS")
+                 .ToList();
+
+                var endIndex = Enumerable.Range(0, answerBank.Count)
+                .Where(i => answerBank[i] == "@END")
+                .ToList();
+
+
+                //quiz.QuestionID = "1";
+                // quiz.Question = "How something works?";
+                // quiz.Answers = new String[] {"1","2","3" };
+                // quiz.AnswerKey = "4";
+
+
+
+                foreach (Match m in questionMatchIndex)
                 {
-                    tw.WriteLine(JSONresult.ToString());
-                    tw.Close();
-                }
-            }
-            else if (!File.Exists(path))
-            {
+                    questionIndex.Add(m.Index.ToString());
+                    Debug.WriteLine(m.Index);
 
-                using (var tw = new StreamWriter(path, true))
+
+                }
+
+                MatchCollection answerMatchIndex = Regex.Matches(result, "@ANSWERS");
+
+                foreach (Match m in answerMatchIndex)
                 {
-                    tw.WriteLine(JSONresult.ToString());
-                    tw.Close();
+                    Console.WriteLine(m.Index);
+                    answerIndex.Add(m.Index.ToString());
+
                 }
-            }
 
-            foreach (Match m in questionMatchIndex)
-            {
-                questionIndex.Add(m.Index.ToString());
-                Debug.WriteLine(m.Index);
+                for (var i = 0; i < questionIndex.Count; i++)
+                {
+
+                    var start = questionIndex[i];
+                    int iStart = Int32.Parse(start.ToString());
+                    var idCount = i + 1;
+                    Debug.WriteLine("iStart = " + iStart);
+
+                    var end = answerIndex[i];
+                    int iEnd = Int32.Parse(end.ToString());
+
+                    //Combined the string to get the answer
+                    int pFrom = result.IndexOf("@QUESTIONS", iStart) + "@QUESTIONS".Length;
+                    int pTo = result.IndexOf("@ANSWERS", iEnd);
+                    string pResult = result.Substring(pFrom, pTo - pFrom);
+                    questionBank.Add(result.Substring(pFrom, pTo - pFrom));
+                    quiz.Question = pResult;
+                    quiz.QuestionID = idCount.ToString();
+                    Debug.WriteLine("");
 
 
-            }
+                    //poulate answers
 
-            MatchCollection answerMatchIndex = Regex.Matches(result, "@ANSWERS");
+                    var addAnswer = answerBank.Skip(answerIndex2[i] + 1).Take(endIndex[i] - (answerIndex2[i] + 1));
+                    answerBlock = new List<string>();
 
-            foreach (Match m in answerMatchIndex)
-            {
-                Console.WriteLine(m.Index);
-                answerIndex.Add(m.Index.ToString());
+                    //answerBlock.Add("@ANSWERSTART" + i);
+                    Debug.WriteLine("");
 
-            }
+                    foreach (string item in addAnswer)
+                    {
+                        answerBlock.Add(item);
+                        Debug.WriteLine("");
 
-            for (var i = 0; i < questionIndex.Count; i++)
-            {
-                var start = questionIndex[i];
-                int iStart = Int32.Parse(start.ToString());
-                Debug.WriteLine("iStart = " + iStart);
 
-                var end = answerIndex[i];
-                int iEnd = Int32.Parse(end.ToString());
+                    }
+                    //quiz.Answers = answerBlock;
+                    string[] popAnswers = answerBlock.Select(c => c.ToString()).ToArray();
+                    quiz.Answers = popAnswers;
+                    // answerBlock.Add("@ANSWEREND" + i);
+                    answerKey.Add(answerBlock[0]);
+                    quiz.AnswerKey = answerBlock[0];
 
-                //Combined the string to get the answer
-                int pFrom = result.IndexOf("@QUESTIONS", iStart) + "@QUESTIONS".Length;
-                int pTo = result.IndexOf("@ANSWERS", iEnd);
-                string pResult = result.Substring(pFrom, pTo - pFrom);
-                questionBank.Add(result.Substring(pFrom, pTo - pFrom));
+                    Debug.WriteLine("");
+
+                    string JSONresult = JsonConvert.SerializeObject(quiz);
+                    string path = @"C:\quiz.json";
+                    if (File.Exists(path))
+                    {
+                        using (var tw = new StreamWriter(path, true))
+                        {
+                            tw.WriteLine(JSONresult.ToString());
+                            tw.Close();
+                        }
+                    }
+                    else if (!File.Exists(path))
+                    {
+
+                        using (var tw = new StreamWriter(path, true))
+                        {
+                            tw.WriteLine(JSONresult.ToString());
+                            tw.Close();
+                        }
+                    }
+
+                    Debug.WriteLine("");
+
+
+                }
+
+
                 Debug.WriteLine("");
-
-            }
-            Debug.WriteLine("");
-        }
-
-        public static void PopulateAnswers()
-        {
-            // Populate the Answer Bank
-   
-            answerKey = new List<string>();
-            answerBank = Form1._quiz;
-
-            var answerIndex = Enumerable.Range(0, answerBank.Count)
-             .Where(i => answerBank[i] == "@ANSWERS")
-             .ToList();
-
-            var endIndex = Enumerable.Range(0, answerBank.Count)
-            .Where(i => answerBank[i] == "@END")
-            .ToList();
-
-
-            for (var i = 0; i < answerIndex.Count; i++)
-
+            } catch (Exception ex) 
             {
-                var addAnswer = answerBank.Skip(answerIndex[i] + 1).Take(endIndex[i] - (answerIndex[i] + 1));
-                answerBlock = new List<string>();
-
-                //answerBlock.Add("@ANSWERSTART" + i);
-
-                foreach (string item in addAnswer)
-                {
-
-                    answerBlock.Add(item);
-
-
-                }
-                // answerBlock.Add("@ANSWEREND" + i);
-                answerKey.Add(answerBlock[0]);
-
-                Debug.WriteLine("");
-
+                MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                   $"Details:\n\n{ex.StackTrace}");
             }
 
 
-        /*    var firstIndex = answerBank.FindIndex(r => r.Contains("@ANSWERS"));
-            var secondIndex = answerBank.FindIndex(r => r.Contains("@END"));
-            var result = answerBank.Skip(firstIndex + 1).Take(secondIndex - (firstIndex + 1));
-            Debug.WriteLine("");
-*/
+
+
         }
-
-
-
-
     }
-
 }

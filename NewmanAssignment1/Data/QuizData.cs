@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewmanAssignment1.Data
+namespace NewmanAssignment1.QuizData
 {
-    public class QuizData
+    public class DataQuiz
     {
-        public string Question;
-        public string AnswerKey;
-        public string Answers;
-
+        public string QuestionID { get; set; }
+        public string Question { get; set; }
+        public string AnswerKey { get; set; }
+        public string[] Answers { get; set; }
     }
 }
+
+

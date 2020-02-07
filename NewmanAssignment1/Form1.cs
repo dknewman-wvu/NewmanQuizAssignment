@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NewmanAssignment1.Helpers;
+using NewmanAssignment1.Services;
 
 namespace NewmanAssignment1
 {
@@ -49,7 +50,9 @@ namespace NewmanAssignment1
             }
         }
 
-       
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            QuizService.SetQuizQuestions();
+        }
     }
 }

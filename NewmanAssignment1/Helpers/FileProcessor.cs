@@ -19,6 +19,7 @@ namespace NewmanAssignment1.Helpers
         public static List<string> answerBank;
         public static List<string> answerBlock;
         public static List<string> answerKey;
+        public static List<QuizData.DataQuiz> popQuiz = new List<QuizData.DataQuiz>();
 
 
 
@@ -32,7 +33,6 @@ namespace NewmanAssignment1.Helpers
                     Form1._quiz = new List<string>();
                     var textInBetween = new List<string>();
                     bool startTagFound = false;
-
 
                     while (!reader.EndOfStream)
                     {
@@ -88,7 +88,6 @@ namespace NewmanAssignment1.Helpers
             try
             {
                 // Populate the Question Bank
-                DataQuiz quiz = new DataQuiz();
                 var questionIndex = new List<string>();
                 var answerIndex = new List<string>();
                 string result = string.Join(" ", Form1._quiz.ToArray());
@@ -106,9 +105,12 @@ namespace NewmanAssignment1.Helpers
                 .Where(i => answerBank[i] == "@END")
                 .ToList();
 
+
                 foreach (Match m in questionMatchIndex)
                 {
                     questionIndex.Add(m.Index.ToString());
+                    Debug.WriteLine(m.Index);
+
 
                 }
 
@@ -116,35 +118,44 @@ namespace NewmanAssignment1.Helpers
 
                 foreach (Match m in answerMatchIndex)
                 {
+                    Console.WriteLine(m.Index);
                     answerIndex.Add(m.Index.ToString());
 
                 }
 
                 for (var i = 0; i < questionIndex.Count; i++)
                 {
-
+                    DataQuiz quiz = new DataQuiz();
                     var start = questionIndex[i];
                     int iStart = Int32.Parse(start.ToString());
                     var idCount = i + 1;
+                    Debug.WriteLine("iStart = " + iStart);
+
                     var end = answerIndex[i];
                     int iEnd = Int32.Parse(end.ToString());
-                    int pFrom = result.IndexOf("@QUESTIONS", iStart) + "@QUESTIONS".Length;
-                    int pTo = result.IndexOf("@ANSWERS", iEnd);
 
                     //Combined the string to get the answer
+                    int pFrom = result.IndexOf("@QUESTIONS", iStart) + "@QUESTIONS".Length;
+                    int pTo = result.IndexOf("@ANSWERS", iEnd);
                     string pResult = result.Substring(pFrom, pTo - pFrom);
                     questionBank.Add(result.Substring(pFrom, pTo - pFrom));
                     quiz.Question = pResult;
                     quiz.QuestionID = idCount.ToString();
+                    Debug.WriteLine("");
+
 
                     //poulate answers
 
                     var addAnswer = answerBank.Skip(answerIndex2[i] + 1).Take(endIndex[i] - (answerIndex2[i] + 1));
                     answerBlock = new List<string>();
 
+                    Debug.WriteLine("");
+
                     foreach (string item in addAnswer)
                     {
                         answerBlock.Add(item);
+                        Debug.WriteLine("");
+
 
                     }
                     string[] popAnswers = answerBlock.Select(c => c.ToString()).ToArray();
@@ -152,33 +163,34 @@ namespace NewmanAssignment1.Helpers
                     answerKey.Add(answerBlock[0]);
                     quiz.AnswerKey = answerBlock[0];
 
-                    string JSONresult = JsonConvert.SerializeObject(quiz);
-                    string path = @"C:\quiz.json";
-                    if (File.Exists(path))
-                    {
-                        using (var tw = new StreamWriter(path, true))
-                        {
 
-                            tw.WriteLine(JSONresult.ToString());
-                            tw.Close();
 
-                        }
-                    }
-                    else if (!File.Exists(path))
-                    {
-                        using (var tw = new StreamWriter(path, true))
-                        {
-
-                            tw.WriteLine(JSONresult.ToString());
-                            tw.Close();
-
-                        }
-                    }
+                    popQuiz.Add(quiz);
+                    Debug.WriteLine("");
 
                 }
 
-                MessageBox.Show("Thank You! Your questions have been added!");
+                string json = JsonConvert.SerializeObject(popQuiz, Formatting.Indented);
+                string path = @"C:\quiz.json";
+                if (File.Exists(path))
+                {
+                    using (var tw = new StreamWriter(path, true))
+                    {
+                        tw.WriteLine(json.ToString());
+                        tw.Close();
+                    }
+                }
+                else if (!File.Exists(path))
+                {
 
+                    using (var tw = new StreamWriter(path, true))
+                    {
+                        tw.WriteLine(json.ToString());
+                        tw.Close();
+                    }
+                }
+
+                Debug.WriteLine("");
             }
             catch (Exception ex)
             {

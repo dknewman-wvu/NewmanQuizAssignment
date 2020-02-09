@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -53,6 +54,14 @@ namespace NewmanAssignment1
         private void button1_Click(object sender, EventArgs e)
         {
             QuizService.SetQuizQuestions();
+            questionBox.Text = QuizService.question;
         }
+
+        public void questionBox_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+       
     }
 }

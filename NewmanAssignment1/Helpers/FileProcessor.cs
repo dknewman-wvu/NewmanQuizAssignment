@@ -21,9 +21,6 @@ namespace NewmanAssignment1.Helpers
         public static List<string> answerKey;
         public static List<QuizData.DataQuiz> popQuiz = new List<QuizData.DataQuiz>();
 
-
-
-
         public static void ReadFile()
         {
             try

@@ -79,6 +79,7 @@
             this.questionBox.Size = new System.Drawing.Size(383, 171);
             this.questionBox.TabIndex = 4;
             this.questionBox.Text = "";
+            this.questionBox.TextChanged += new System.EventHandler(this.questionBox_TextChanged);
             // 
             // Form1
             // 

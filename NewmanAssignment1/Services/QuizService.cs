@@ -16,8 +16,8 @@ namespace NewmanAssignment1.Services
         public static int count = 0;
         public static int randomNumber;
         public static string question { get; set; }
-        public static string answerKey;
-        public static List<string> answer;
+        public static string answerKey { get; set; } 
+        public static string[] answer { get; set; }
 
 
         public static void SetQuizQuestions()
@@ -30,9 +30,9 @@ namespace NewmanAssignment1.Services
                 Random rnd = new Random();
                 randomNumber = rnd.Next(count);
                 question = GetQuestion();
+                answer = GetAnswer();
+                answerKey = GetAnswerKey();
                 Debug.WriteLine(randomNumber);
-
-
 
             }
 
@@ -46,9 +46,9 @@ namespace NewmanAssignment1.Services
 
         }
 
-        public static string GetAnswer()
+        public static string[] GetAnswer()
         {
-            var pollAnswer = quizItems[randomNumber].Answers.ToString();
+            string[] pollAnswer = quizItems[randomNumber].Answers;
             return pollAnswer;
 
         }
@@ -60,12 +60,18 @@ namespace NewmanAssignment1.Services
 
         }
 
-        private static int GetCount ()
+        private static int GetCount()
         {
             count = quizItems.Count();
             return count;
         }
 
+        public static void populateAnswers()
+        {
+            answer = GetAnswer();
+            Console.WriteLine("");
+
+        }
 
     }
 

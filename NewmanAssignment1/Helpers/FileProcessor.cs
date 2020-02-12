@@ -45,7 +45,7 @@ namespace NewmanAssignment1.Helpers
                         }
                         if (!startTagFound)
                         {
-                            startTagFound = line.StartsWith("@QUESTIONS");
+                            startTagFound = line.StartsWith("@Q");
                             Form1._quiz.Add(line);
 
                             continue;
@@ -53,7 +53,7 @@ namespace NewmanAssignment1.Helpers
                         }
 
 
-                        bool endTagFound = line.StartsWith("@END");
+                        bool endTagFound = line.StartsWith("@E");
                         if (endTagFound)
                         {
                             textInBetween.Clear();
@@ -91,15 +91,15 @@ namespace NewmanAssignment1.Helpers
                 questionBank = new List<string>();
                 answerKey = new List<string>();
                 answerBank = Form1._quiz;
-                MatchCollection questionMatchIndex = Regex.Matches(result, "@QUESTIONS");
+                MatchCollection questionMatchIndex = Regex.Matches(result, "@Q");
 
 
                 var answerIndex2 = Enumerable.Range(0, answerBank.Count)
-                 .Where(i => answerBank[i] == "@ANSWERS")
+                 .Where(i => answerBank[i] == "@A")
                  .ToList();
 
                 var endIndex = Enumerable.Range(0, answerBank.Count)
-                .Where(i => answerBank[i] == "@END")
+                .Where(i => answerBank[i] == "@E")
                 .ToList();
 
 
@@ -111,7 +111,7 @@ namespace NewmanAssignment1.Helpers
 
                 }
 
-                MatchCollection answerMatchIndex = Regex.Matches(result, "@ANSWERS");
+                MatchCollection answerMatchIndex = Regex.Matches(result, "@A");
 
                 foreach (Match m in answerMatchIndex)
                 {
@@ -132,8 +132,8 @@ namespace NewmanAssignment1.Helpers
                     int iEnd = Int32.Parse(end.ToString());
 
                     //Combined the string to get the answer
-                    int pFrom = result.IndexOf("@QUESTIONS", iStart) + "@QUESTIONS".Length;
-                    int pTo = result.IndexOf("@ANSWERS", iEnd);
+                    int pFrom = result.IndexOf("@Q", iStart) + "@Q".Length;
+                    int pTo = result.IndexOf("@A", iEnd);
                     string pResult = result.Substring(pFrom, pTo - pFrom);
                     questionBank.Add(result.Substring(pFrom, pTo - pFrom));
                     quiz.Question = pResult;

@@ -32,6 +32,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.questionBox = new System.Windows.Forms.RichTextBox();
+            this.SubmitButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -52,6 +53,7 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "End Quiz";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
@@ -73,11 +75,23 @@
             this.questionBox.Text = "";
             this.questionBox.TextChanged += new System.EventHandler(this.questionBox_TextChanged);
             // 
+            // SubmitButton
+            // 
+            this.SubmitButton.Location = new System.Drawing.Point(519, 339);
+            this.SubmitButton.Name = "SubmitButton";
+            this.SubmitButton.Size = new System.Drawing.Size(109, 23);
+            this.SubmitButton.TabIndex = 5;
+            this.SubmitButton.Text = "Submit";
+            this.SubmitButton.UseVisualStyleBackColor = false;
+            this.SubmitButton.Visible = false;
+            this.SubmitButton.Click += new System.EventHandler(this.SubmitButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(707, 411);
+            this.Controls.Add(this.SubmitButton);
             this.Controls.Add(this.questionBox);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -95,6 +109,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.RichTextBox questionBox;
+        private System.Windows.Forms.Button SubmitButton;
     }
 }
 

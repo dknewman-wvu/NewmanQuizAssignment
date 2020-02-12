@@ -15,8 +15,9 @@ namespace NewmanAssignment1.Services
         public static List<QuizData.DataQuiz> quizItems;
         public static int count = 0;
         public static int randomNumber;
+        public static string correctAnswer;
         public static string question { get; set; }
-        public static string answerKey { get; set; } 
+        public static int answerKey { get; set; }
         public static string[] answer { get; set; }
 
 
@@ -29,9 +30,10 @@ namespace NewmanAssignment1.Services
                 count = GetCount();
                 Random rnd = new Random();
                 randomNumber = rnd.Next(count);
+                answerKey = GetAnswerKey();
+                correctAnswer = GetCorrectAnswer();
                 question = GetQuestion();
                 answer = GetAnswer();
-                answerKey = GetAnswerKey();
                 Debug.WriteLine(randomNumber);
 
             }
@@ -53,9 +55,15 @@ namespace NewmanAssignment1.Services
 
         }
 
-        public static string GetAnswerKey()
+        public static string GetCorrectAnswer()
         {
-            var pollAnswerKey = quizItems[randomNumber].AnswerKey;
+            string GetCorrectAnswer = quizItems[randomNumber].Answers[answerKey];
+            Console.WriteLine(GetCorrectAnswer);
+            return GetCorrectAnswer;
+        }
+        public static int GetAnswerKey()
+        {
+            int pollAnswerKey = Int32.Parse(quizItems[randomNumber].AnswerKey);
             return pollAnswerKey;
 
         }

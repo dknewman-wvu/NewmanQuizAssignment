@@ -33,6 +33,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.questionBox = new System.Windows.Forms.RichTextBox();
             this.SubmitButton = new System.Windows.Forms.Button();
+            this.OptionsButton = new System.Windows.Forms.Button();
+            this.ScoreButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -86,11 +88,31 @@
             this.SubmitButton.Visible = false;
             this.SubmitButton.Click += new System.EventHandler(this.SubmitButton_Click);
             // 
+            // OptionsButton
+            // 
+            this.OptionsButton.Location = new System.Drawing.Point(41, 143);
+            this.OptionsButton.Name = "OptionsButton";
+            this.OptionsButton.Size = new System.Drawing.Size(75, 23);
+            this.OptionsButton.TabIndex = 6;
+            this.OptionsButton.Text = "Set Options";
+            this.OptionsButton.UseVisualStyleBackColor = true;
+            // 
+            // ScoreButton
+            // 
+            this.ScoreButton.Location = new System.Drawing.Point(41, 188);
+            this.ScoreButton.Name = "ScoreButton";
+            this.ScoreButton.Size = new System.Drawing.Size(75, 23);
+            this.ScoreButton.TabIndex = 7;
+            this.ScoreButton.Text = "Display Scores";
+            this.ScoreButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(707, 411);
+            this.Controls.Add(this.ScoreButton);
+            this.Controls.Add(this.OptionsButton);
             this.Controls.Add(this.SubmitButton);
             this.Controls.Add(this.questionBox);
             this.Controls.Add(this.button3);
@@ -110,6 +132,8 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.RichTextBox questionBox;
         private System.Windows.Forms.Button SubmitButton;
+        private System.Windows.Forms.Button OptionsButton;
+        private System.Windows.Forms.Button ScoreButton;
     }
 }
 
